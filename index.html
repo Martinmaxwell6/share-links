@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>แชร์ลิงก์รวม555</title>
+<title>แชร์ลิงก์เต็ม</title>
 <style>
 body { background:#111; color:#fff; font-family: Arial; padding:30px; }
 .container { max-width:600px; margin:auto; }
@@ -16,8 +16,8 @@ a { color:#00ff99; text-decoration:none; }
 <body>
 
 <div class="container">
-<h2>🔗 แชร์ลิงก์ (ทุกคนเห็น)</h2>
-<input id="linkInput" placeholder="วางลิงก์ตรงนี้">
+<h2>🔗 แชร์ลิงก์เต็ม (ทุกคนเห็น)</h2>
+<input id="linkInput" placeholder="วางลิงก์ https:// ของคุณตรงนี้">
 <button id="saveBtn">Save</button>
 <ul id="list"></ul>
 </div>
@@ -47,8 +47,13 @@ const btn = document.getElementById("saveBtn");
 btn.onclick = () => {
     const link = input.value.trim();
     if(!link) return;
+    // ตรวจสอบว่าขึ้นต้นด้วย https://
+    if(!link.startsWith("http://") && !link.startsWith("https://")){
+        alert("กรุณาใส่ลิงก์เต็มที่เริ่มด้วย http:// หรือ https://");
+        return;
+    }
 
-    // ใช้ link เป็น document ID เอง เพื่อเก็บเต็ม ๆ
+    // ใช้ link เป็น document ID เอง → เก็บเต็ม ๆ
     db.collection("links").doc(link).set({
         url: link,
         time: Date.now()
