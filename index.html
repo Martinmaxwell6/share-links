@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>แชร์ลิงก์รวม</title>
+<style>
+body { background:#111; color:#fff; font-family: Arial; padding:30px; }
+.container { max-width:500px; margin:auto; }
+input, button { width:100%; padding:10px; margin-top:10px; border-radius:5px; border:none; }
+button { background:#00ff99; cursor:pointer; }
+li { background:#222; margin-top:10px; padding:10px; border-radius:5px; word-break: break-all; }
+a { color:#00ff99; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h2>🔗 แชร์ลิงก์ (ทุกคนเห็น)</h2>
+<input id="linkInput" placeholder="วางลิงก์ตรงนี้">
+<button id="saveBtn">Save</button>
+<ul id="list"></ul>
+</div>
+
+<!-- Firebase v9 compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDN90rFQrbYwUhPiJjuclloN-O_J4yaVCA",
+  authDomain: "tt12-b06ef.firebaseapp.com",
+  projectId: "tt12-b06ef",
+  storageBucket: "tt12-b06ef.firebasestorage.app",
+  messagingSenderId: "70557605262",
+  appId: "1:70557605262:web:379c7d2db38fed071898df"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const input = document.getElementById("linkInput");
+const list = document.getElementById("list");
+const btn = document.getElementById("saveBtn");
+
+// Save link
+btn.onclick = () => {
+    const link = input.value.trim();
+    if(!link) return;
+
+    db.collection("links").add({
+        url: link,
+        time: Date.now()
+    }).then(() => input.value = "");
+};
+
+// Real-time update
+db.collection("links").orderBy("time", "desc")
+.onSnapshot(snapshot => {
+    list.innerHTML = "";
+    snapshot.forEach(doc => {
+        const li = document.createElement("li");
+        li.innerHTML = `<a href="${doc.data().url}" target="_blank">${doc.data().url}</a>`;
+        list.appendChild(li);
+    });
+});
+</script>
+</body>
+</html>
