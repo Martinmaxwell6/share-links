@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>แชร์ลิงก์รวม</title>
+<title>แชร์ลิงก์รวม555</title>
 <style>
 body { background:#111; color:#fff; font-family: Arial; padding:30px; }
 .container { max-width:600px; margin:auto; }
@@ -43,12 +43,13 @@ const input = document.getElementById("linkInput");
 const list = document.getElementById("list");
 const btn = document.getElementById("saveBtn");
 
-// Save link
+// Save link แบบเก็บเต็ม ๆ
 btn.onclick = () => {
     const link = input.value.trim();
     if(!link) return;
 
-    db.collection("links").add({
+    // ใช้ link เป็น document ID เอง เพื่อเก็บเต็ม ๆ
+    db.collection("links").doc(link).set({
         url: link,
         time: Date.now()
     }).then(() => input.value = "")
@@ -61,7 +62,6 @@ db.collection("links").orderBy("time", "desc")
     list.innerHTML = "";
     snapshot.forEach(doc => {
         const li = document.createElement("li");
-        // แสดงลิงก์เต็ม ๆ และคลิกได้
         li.innerHTML = `<a href="${doc.data().url}" target="_blank">${doc.data().url}</a>`;
         list.appendChild(li);
     });
